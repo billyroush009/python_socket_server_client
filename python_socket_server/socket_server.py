@@ -1,16 +1,5 @@
 # echo-server.py
 
-'''
-Ritesh wants to see the C# implementation in place. 
-Since my current PLC api still has a problem reading .O bools I need you to modify your plc server to just read the .O signals from the PLC. 
-* Write it as a socket server to listen on 127.0.0.1:4000 for robot 2 requests and 127.0.0.1:4001 for robot 3 read requests. *
-I'm using different sockets to keep the communications simple. Request format will be simply a text string "read\n".
-
-When you get a read request, read the signals from the plc for the corresponding robot and put the result into a dictionary. 
-Use the same format as in your test program with the last part of the tag name as the key and the result should be a bool (True | False). 
-Use json.dumps(<dictionary>) to serialize the dictionary and return the serialized string terminated with "\n".
-'''
-
 import socket
 #from pycomm3 import LogixDriver
 #from pycomm3.cip.data_types import DINT, UINT
@@ -22,90 +11,6 @@ import sys
 #PORT = 4000  # Port to listen on (non-privileged ports are > 1023)
 
 kill_threads = False
-
-# global variable declarations, some are probably unnecessary(?)
-'''
-arrayOutTags = [
-    'LoadProgram',
-    'StartProgram',
-    'EndProgram',
-    'EndScan',
-    'AbortProgram',
-    'Reset'
-    ];
-'''
-
-arrayOutTags = [
-    'LoadProgram',
-    'StartProgram',
-    'EndProgram',
-    'AbortProgram',
-    'Reset',
-    'PartType',
-    'PartProgram',
-    'ScanNumber',
-    'PUN{64}',
-    'GMPartNumber{8}',
-    'Module',
-    'PlantCode',
-    'Month',
-    'Day',
-    'Year',
-    'Hour',
-    'Minute',
-    'Second',
-    'QualityCheckOP110',
-    'QualityCheckOP120',
-    'QualityCheckOP130',
-    'QualityCheckOP140',
-    'QualityCheckOP150',
-    'QualityCheckOP310',
-    'QualityCheckOP320',
-    'QualityCheckOP330',
-    'QualityCheckOP340',
-    'QualityCheckOP360',
-    'QualityCheckOP370',
-    'QualityCheckOP380',
-    'QualityCheckOP390',
-    'QualityCheckScoutPartTracking'
-    #'KeyenceFltCode',
-    #'PhoenixFltCode'
-    ];
-
-tagKeys = []
-for tag in arrayOutTags:
-    tagKeys.append(tag.split("{")[0]) # delete trailiing { if it exists
-
-#single-shot read of all 'arrayOutTags' off PLC
-def read_plc_dict(machine_num, plc):
-    #print("read_plc_dict, generating list of read tags")
-    readList = []
-    for tag in arrayOutTags :
-        newTag = 'Program:HM1450_VS' + machine_num + '.VPC1.O.' + tag;
-        #print(newTag);
-        readList.append(newTag)
-        
-    resultsList = plc.read(*readList) # tag, value, type, error
-    readDict = {}
-
-    #print("returned results")
-    #print(resultsList)
-
-    for tag in resultsList:
-        key = tag.tag.split(".")[-1]
-        #key = tag[0] #prints entire tag name, Program:HM1450_VS' + machine_num + '.VPC1.O.' + tag
-        #print(key)
-        #print(tag)
-        readDict[key] = tag[1]
-
-    #print(readDict)
-    return readDict
-#END read_plc_dict
-
-def read_plc_tag(plc, tag):
-    read_plc = plc.read(tag)
-    read_plc_value = str(read_plc[1])
-    return read_plc_value
 
 def start_server(host, port):
     global kill_threads
