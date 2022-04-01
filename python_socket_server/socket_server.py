@@ -12,8 +12,8 @@ Use json.dumps(<dictionary>) to serialize the dictionary and return the serializ
 '''
 
 import socket
-from pycomm3 import LogixDriver
-from pycomm3.cip.data_types import DINT, UINT
+#from pycomm3 import LogixDriver
+#from pycomm3.cip.data_types import DINT, UINT
 import json
 import threading
 import sys
@@ -146,15 +146,16 @@ def start_server(host, port):
                             
 
                             response_string = '{ok' #beginning of response for either read or write request
+                            print(data_cmd)
 
                             if(port == 4000):
-                                if(data_cmd == 'r'):
+                                if(data_cmd == '\"r\"'):
                                     print('READ')
                                     data_tag = data_list_tag[2]
                                     data_tag = data_tag.strip('}')
                                     #plc_value = read_plc_tag(plc, data_tag)
                                     #response_string = response_string + ', ' + plc_value + '}\n'
-                                elif(data_cmd == 'w'):
+                                elif(data_cmd == '\"w\"'):
                                     data_tag = data_list_tag[2]
                                     print(data_tag)
                                     #print(data_list[2])
