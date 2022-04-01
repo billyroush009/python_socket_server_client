@@ -15,7 +15,7 @@ while True:
             time_start = datetime.datetime.now()
             #s.sendall(b"Hello, world")
             #s.sendall(b"{cmd: r, tag: <full_tag_name>}")
-            s.sendall(b'{"cmd": "r", "tag": "Program:HM1450_VS14.VPC1.O.LoadProgram"}')
+            s.sendall(b'{"cmd": "r", "tag": "LoadProgram"}')
             data = s.recv(1024)
 
             time_1_end = datetime.datetime.now()
